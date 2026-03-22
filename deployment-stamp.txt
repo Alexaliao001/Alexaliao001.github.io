@@ -1,1 +1,1 @@
-deployed 2026-03-22T10:53:24Z api=https://fortune-insight.rongjianliao.workers.dev worker=f518fa19-fb97-49be-bb43-c73c4a13dc32 env=repo-.env.production guest-auto-activation=enabled
+deployed 2026-03-22T11:22:41Z api=https://fortune-insight.rongjianliao.workers.dev worker=dc5e04ee-fd3a-47cb-94c1-9600327425b1 env=repo-.env.production frontend=4625896 conversion-polish=enabled
