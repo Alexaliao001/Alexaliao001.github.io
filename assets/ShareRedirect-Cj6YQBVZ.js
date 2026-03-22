@@ -1,1 +1,0 @@
-import{bo as s,r as n}from"./vendor-DbWTYTKx.js";function m(){const[,t]=s();return n.useEffect(()=>{const c=new URLSearchParams(window.location.search),e=new URLSearchParams;for(const a of["utm_source","utm_medium","utm_campaign"]){const r=c.get(a);r&&e.set(a,r)}const o=e.toString();t(o?`/?${o}`:"/",{replace:!0})},[t]),null}export{m as default};
