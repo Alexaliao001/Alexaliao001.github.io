@@ -4,4 +4,4 @@ Disallow: /api/
 Disallow: /profile
 Disallow: /orders
 
-Sitemap: https://alexaliao001.github.io/sitemap.xml
+Sitemap: https://fortune-insight.rongjianliao.workers.dev/sitemap.xml
