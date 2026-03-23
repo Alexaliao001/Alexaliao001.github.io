@@ -1,1 +1,1 @@
-deployed 2026-03-23T12:51:11.458Z api=https://fortune-insight.rongjianliao.workers.dev frontend=8f0cb82 cname=none pages=materialized-routes
+deployed 2026-03-23T16:42:50.509Z api=https://fortune-insight.rongjianliao.workers.dev frontend=17d5416 cname=none pages=materialized-routes
