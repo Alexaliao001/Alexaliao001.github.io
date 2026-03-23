@@ -18,10 +18,10 @@
  * - postMessage('SW_UPDATED') notifies all clients → app shows update banner
  */
 
-// build-033cc8d35637 is replaced at build time by the Vite plugin.
+// build-6e2e95390a6c is replaced at build time by the Vite plugin.
 // If not replaced (dev mode), falls back to a timestamp-based version.
-const CACHE_VERSION = typeof 'build-033cc8d35637' !== 'undefined' 
-  ? 'build-033cc8d35637' 
+const CACHE_VERSION = typeof 'build-6e2e95390a6c' !== 'undefined' 
+  ? 'build-6e2e95390a6c' 
   : 'dev-' + Date.now();
 
 const CACHE_PREFIX = 'fortune-';
