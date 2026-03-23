@@ -1,1 +1,0 @@
-import{aV as s,r as n}from"./vendor-CRvWLwHz.js";function m(){const[,t]=s();return n.useEffect(()=>{const c=new URLSearchParams(window.location.search),e=new URLSearchParams;for(const o of["utm_source","utm_medium","utm_campaign"]){const r=c.get(o);r&&e.set(o,r)}const a=e.toString();t(a?`/?${a}`:"/",{replace:!0})},[t]),null}export{m as default};
