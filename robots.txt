@@ -4,4 +4,4 @@ Disallow: /api/
 Disallow: /profile
 Disallow: /orders
 
-Sitemap: https://fortune-insight.rongjianliao.workers.dev/sitemap.xml
+Sitemap: https://fortunesite.one/sitemap.xml

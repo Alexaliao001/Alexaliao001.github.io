@@ -18,10 +18,10 @@
  * - postMessage('SW_UPDATED') notifies all clients → app shows update banner
  */
 
-// build-ab35d5ff8f35 is replaced at build time by the Vite plugin.
+// build-9ddc4cf7303f is replaced at build time by the Vite plugin.
 // If not replaced (dev mode), falls back to a timestamp-based version.
-const CACHE_VERSION = typeof 'build-ab35d5ff8f35' !== 'undefined' 
-  ? 'build-ab35d5ff8f35' 
+const CACHE_VERSION = typeof 'build-9ddc4cf7303f' !== 'undefined' 
+  ? 'build-9ddc4cf7303f' 
   : 'dev-' + Date.now();
 
 const CACHE_PREFIX = 'fortune-';
@@ -75,9 +75,12 @@ self.addEventListener('activate', (event) => {
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 function isHashedAsset(url) {
-  // /assets/Home-BkIMASk0.js, /assets/vendor-abc123.css, etc.
-  return url.pathname.startsWith('/assets/') && 
-    /\.[a-f0-9]{6,}\.(js|css)$/i.test(url.pathname);
+  // Vite/Rollup hashes are base64-ish (mixed case), not pure hex:
+  // /assets/Home-BkIMASkO.js, /assets/vendor-C87DU7gg.js
+  return (
+    url.pathname.startsWith('/assets/') &&
+    /\.[A-Za-z0-9_-]{6,}\.(js|css|mjs)$/.test(url.pathname)
+  );
 }
 
 function isImageOrMedia(url) {
@@ -93,9 +96,8 @@ function shouldSkip(url) {
   if (!url.protocol.startsWith('http')) return true;
   if (url.hostname.includes('stripe')) return true;
   if (url.hostname.includes('umami')) return true;
-  // Only cache same-origin + CDN
-  if (url.origin !== self.location.origin && 
-      !url.hostname.includes('manuscdn.com')) return true;
+  // Only cache same-origin assets
+  if (url.origin !== self.location.origin) return true;
   return false;
 }
 
@@ -104,11 +106,36 @@ function shouldSkip(url) {
 /** Cache First for hashed assets (immutable by nature) */
 async function cacheFirst(request, cacheName) {
   const cached = await caches.match(request);
-  if (cached) return cached;
+  // Never reuse a cached non-JS/CSS body for asset URLs (e.g. stale HTML 200)
+  if (cached) {
+    const ct = cached.headers.get('content-type') || '';
+    const isAssetOk =
+      ct.includes('javascript') ||
+      ct.includes('css') ||
+      ct.includes('application/json') ||
+      ct.includes('wasm') ||
+      ct.includes('font');
+    if (cached.ok && isAssetOk) return cached;
+    // Drop bad cache entry and refetch
+    try {
+      const cache = await caches.open(cacheName);
+      await cache.delete(request);
+    } catch {
+      // ignore
+    }
+  }
 
   try {
     const response = await fetch(request);
-    if (response.ok) {
+    const ct = response.headers.get('content-type') || '';
+    const isAssetOk =
+      ct.includes('javascript') ||
+      ct.includes('css') ||
+      ct.includes('application/json') ||
+      ct.includes('wasm') ||
+      ct.includes('font');
+    // Only cache real successful asset responses (never HTML SPA fallback)
+    if (response.ok && isAssetOk) {
       const cache = await caches.open(cacheName);
       cache.put(request, response.clone());
     }
